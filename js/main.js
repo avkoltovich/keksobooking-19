@@ -26,23 +26,23 @@ var getMixedArray = function (array) {
   for (var i = 0; i < array.length; i++) {
     do {
       swap = getRandomInteger(0, array.length - 1);
-    } while (arrayForLog.indexOf(swap) != -1);
+    } while (arrayForLog.indexOf(swap) !== -1);
     arrayForLog.push(swap);
     mixedArray.push(array[swap]);
   }
 
   return mixedArray;
-}
+};
 
 var getClippedArray = function (array) {
-  let clippedArray = [];
+  var clippedArray = [];
 
-  for (let i = 0; i < getRandomInteger(0, array.length - 1); i++) {
+  for (var i = 0; i < getRandomInteger(0, array.length - 1); i++) {
     clippedArray.push(array[i]);
   }
 
   return clippedArray;
-}
+};
 
 var generateArrayOfAvatars = function (number) {
   var ArrayOfAvatar = [];
