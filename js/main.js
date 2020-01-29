@@ -1,6 +1,6 @@
 'use strict';
 
-var NUMBER_OF_AUTHORS = 8;
+var NUMBER_OF_ADS = 8;
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var TIMES_OF_CHECK_IN = ['12:00', '13:00', '14:00'];
 var TIMES_OF_CHECKOUT = ['12:00', '13:00', '14:00'];
@@ -8,10 +8,11 @@ var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditio
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var LOCATION_MIN_Y = 130;
 var LOCATION_MAX_Y = 630;
-var LOCATION_MIN_X = 0;
+var LOCATION_MIN_X = 25;
 var map = document.querySelector('.map');
-var locationMaxX = map.offsetWidth;
-var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+var pinsBlock = map.querySelector('.map__pins');
+var PinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+var locationMaxX = map.offsetWidth - 25;
 
 var getRandomInteger = function (min, max) {
   return Math.floor(Math.random() * (max + 1 - min)) + min;
@@ -56,7 +57,7 @@ var generateArrayOfAvatars = function (number) {
 var generateRandomAd = function (avatars, types, timesOfCheckIn, timesOfCheckout, features, photos, minX, maxX, minY, maxY) {
   var ad = {author: {}, offer: {}, location: {}};
   ad.author.avatar = avatars.pop();
-  ad.offer.title = '';
+  ad.offer.title = 'Заголовок предложения';
   ad.offer.address = '600, 350';
   ad.offer.price = 0;
   ad.offer.type = types[getRandomInteger(0, types.length - 1)];
@@ -85,15 +86,25 @@ var createArrayOfAds = function (number, types, timesOfCheckIn, timesOfCheckout,
 };
 
 var createAdPin = function (ad) {
-  var pin = similarPinTemplate.cloneNode(true);
+  var pin = PinTemplate.cloneNode(true);
 
-  wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-  wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-  wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+  pin.style.left = (ad.location.x - 25) + 'px';
+  pin.style.top = (ad.location.y - 70) + 'px';
+  pin.querySelector('img').setAttribute('src', ad.author.avatar);
+  pin.querySelector('img').setAttribute('alt', ad.offer.title);
 
-  return wizardElement;
+  return pin;
 };
 
-var ArrayOfAds = createArrayOfAds(NUMBER_OF_AUTHORS, TYPES, TIMES_OF_CHECK_IN, TIMES_OF_CHECKOUT, FEATURES, PHOTOS, LOCATION_MIN_X, locationMaxX, LOCATION_MIN_Y, LOCATION_MAX_Y);
+var createPinsBlock = function (ads) {
+  var fragment = document.createDocumentFragment();
 
+  for (var i = 0; i < ads.length; i++) {
+    pinsBlock.appendChild(createAdPin(ads[i]));
+  }
+
+  pinsBlock.appendChild(fragment);
+};
+
+createPinsBlock(createArrayOfAds(NUMBER_OF_ADS, TYPES, TIMES_OF_CHECK_IN, TIMES_OF_CHECKOUT, FEATURES, PHOTOS, LOCATION_MIN_X, locationMaxX, LOCATION_MIN_Y, LOCATION_MAX_Y));
 map.classList.remove('map--faded');
