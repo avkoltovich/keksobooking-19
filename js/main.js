@@ -17,7 +17,6 @@ var filtersContainer = map.querySelector('.map__filters-container');
 var pinsBlock = map.querySelector('.map__pins');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-
 var locationMaxX = map.offsetWidth - 25;
 
 var getRandomInteger = function (min, max) {
@@ -112,65 +111,61 @@ var getCorrectWordForGuest = function (number) {
   return (number === 1) ? number + ' гостя' : number + ' гостей';
 };
 
-var createCard = function (ads) {
+var createCard = function (ads, index) {
   var card = cardTemplate.cloneNode(true);
   var popupFeatures = card.querySelector('.popup__features');
   var popupFeature = card.querySelectorAll('.popup__feature');
   var popupPhotos = card.querySelector('.popup__photos');
   var popupPhoto = popupPhotos.querySelector('.popup__photo');
 
-  card.querySelector('.popup__title').textContent = ads[0].offer.title;
-  card.querySelector('.popup__text--address').textContent = ads[0].offer.address;
-  card.querySelector('.popup__text--price').textContent = ads[0].offer.price + '₽/ночь';
+  card.querySelector('.popup__title').textContent = ads[index].offer.title;
+  card.querySelector('.popup__text--address').textContent = ads[index].offer.address;
+  card.querySelector('.popup__text--price').textContent = ads[index].offer.price + '₽/ночь';
 
-  switch (ads[0].offer.type) {
+  var roomType = '';
+
+  switch (ads[index].offer.type) {
     case 'flat':
-      card.querySelector('.popup__type').textContent = 'Квартира';
+      roomType = 'Квартира';
       break;
     case 'bungalo':
-      card.querySelector('.popup__type').textContent = 'Бунгало';
+      roomType = 'Бунгало';
       break;
     case 'house':
-      card.querySelector('.popup__type').textContent = 'Дом';
+      roomType = 'Дом';
       break;
     case 'palace':
-      card.querySelector('.popup__type').textContent = 'Дворец';
+      roomType = 'Дворец';
       break;
   }
 
-  card.querySelector('.popup__text--capacity').textContent = getCorrectWordForRoom(ads[0].offer.rooms) + ' для ' + getCorrectWordForGuest(ads[0].offer.guests);
-  card.querySelector('.popup__text--time').textContent = 'Заезд после ' + ads[0].offer.checkin + ', выезд до ' + ads[0].offer.checkout;
+  card.querySelector('.popup__type').textContent = roomType;
 
-  for (var i = popupFeature.length - 1; i >= ads[0].offer.features.length; i--) {
+  card.querySelector('.popup__text--capacity').textContent = getCorrectWordForRoom(ads[index].offer.rooms) + ' для ' + getCorrectWordForGuest(ads[index].offer.guests);
+  card.querySelector('.popup__text--time').textContent = 'Заезд после ' + ads[index].offer.checkin + ', выезд до ' + ads[index].offer.checkout;
+
+  for (var i = popupFeature.length - 1; i >= ads[index].offer.features.length; i--) {
     popupFeatures.removeChild(popupFeature[i]);
   }
 
-  card.querySelector('.popup__description').textContent = ads[0].offer.description;
-  popupPhoto.setAttribute('src', ads[0].offer.photos[0]);
+  card.querySelector('.popup__description').textContent = ads[index].offer.description;
+  popupPhoto.setAttribute('src', ads[index].offer.photos[index]);
 
-  if (ads[0].offer.photos.length > 1) {
-    for (i = 1; i < ads[0].offer.photos.length; i++) {
-      var newPopupPhoto = popupPhoto.cloneNode();
+  if (ads[index].offer.photos.length > 1) {
+    for (i = 1; i < ads[index].offer.photos.length; i++) {
+      var newPopupPhoto = popupPhoto.cloneNode(false);
       popupPhotos.appendChild(newPopupPhoto);
-      newPopupPhoto.setAttribute('src', ads[0].offer.photos[i]);
+      newPopupPhoto.setAttribute('src', ads[index].offer.photos[i]);
     }
   }
 
-  card.querySelector('.popup__avatar').setAttribute('src', ads[0].author.avatar);
+  card.querySelector('.popup__avatar').setAttribute('src', ads[index].author.avatar);
 
   return card;
-};
-
-var createCardBlock = function (card) {
-  var fragment = document.createDocumentFragment();
-
-  fragment.appendChild(card);
-
-  return fragment;
 };
 
 var randomAds = createAds(NUMBER_OF_ADS);
 
 pinsBlock.appendChild(createPinsBlock(randomAds));
-map.insertBefore(createCardBlock(createCard(randomAds)), filtersContainer);
+map.insertBefore(createCard(randomAds, 0), filtersContainer);
 map.classList.remove('map--faded');
