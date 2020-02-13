@@ -15,9 +15,15 @@ var LOCATION_MIN_X = 25;
 var map = document.querySelector('.map');
 var filtersContainer = map.querySelector('.map__filters-container');
 var pinsBlock = map.querySelector('.map__pins');
+var mainMapPin = map.querySelector('.map__pin--main');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 var locationMaxX = map.offsetWidth - 25;
+var adForm = document.querySelector('.ad-form');
+var adFieldsets = adForm.querySelectorAll('fieldset');
+var mapFilterForm = document.querySelector('.map__filters');
+var mapFilterSelectList = mapFilterForm.querySelectorAll('.map__filter');
+var mapFilterFieldset = mapFilterForm.querySelector('.map__features');
 
 var getRandomInteger = function (min, max) {
   return Math.floor(Math.random() * (max + 1 - min)) + min;
@@ -169,8 +175,42 @@ var createCard = function (arrayItem) {
   return card;
 };
 
-var randomAds = createAds(NUMBER_OF_ADS);
+var disableFormItems = function (list) {
+  for (var i = 0; i < list.length; i++) {
+    list[i].setAttribute('disabled', 'disabled');
+  }
+};
 
-pinsBlock.appendChild(createPinsBlock(randomAds));
-map.insertBefore(createCard(randomAds[0]), filtersContainer);
-map.classList.remove('map--faded');
+var enableFormItems = function (list) {
+  for (var i = 0; i < list.length; i++) {
+    list[i].removeAttribute('disabled');
+  }
+};
+
+var disableAllForms = function () {
+  disableFormItems(adFieldsets);
+  disableFormItems(mapFilterSelectList);
+  disableFormItems(mapFilterFieldset);
+};
+
+var enableAllForms = function () {
+  enableFormItems(adFieldsets);
+  enableFormItems(mapFilterSelectList);
+  enableFormItems(mapFilterFieldset);
+};
+
+var onMainPinMousedown = function () {
+  enableAllForms();
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  mainMapPin.removeEventListener('mousedown', onMainPinMousedown);
+}
+
+var randomAds = createAds(NUMBER_OF_ADS);
+disableAllForms();
+
+mainMapPin.addEventListener('mousedown', onMainPinMousedown);
+
+// pinsBlock.appendChild(createPinsBlock(randomAds));
+// map.insertBefore(createCard(randomAds[0]), filtersContainer);
+// map.classList.remove('map--faded');
