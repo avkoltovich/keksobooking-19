@@ -19,6 +19,8 @@ var ENTER_KEY = 'Enter';
 var MAIN_MOUSE_BUTTON = 0;
 var MAIN_MAP_PIN_WIDTH = 65;
 var MAIN_MAP_PIN_HEIGHT = 87;
+var FORM_ENABLED = false;
+var FORM_DISABLED = true;
 var map = document.querySelector('.map');
 // var filtersContainer = map.querySelector('.map__filters-container');
 var pinsBlock = map.querySelector('.map__pins');
@@ -189,33 +191,28 @@ var createPinsBlock = function (ads) {
 //   return card;
 // };
 
-var disableFormItems = function (list) {
+var toggleDisabledFormItems = function (list, isDisabled) {
   for (var i = 0; i < list.length; i++) {
-    list[i].setAttribute('disabled', 'disabled');
-  }
-};
-
-var enableFormItems = function (list) {
-  for (var i = 0; i < list.length; i++) {
-    list[i].removeAttribute('disabled');
+    list[i].disabled = isDisabled;
   }
 };
 
 var disableAllForms = function () {
-  disableFormItems(adFieldsets);
-  disableFormItems(mapFilterSelectList);
-  disableFormItems(mapFilterFieldset);
+  toggleDisabledFormItems(adFieldsets, FORM_DISABLED);
+  toggleDisabledFormItems(mapFilterSelectList, FORM_DISABLED);
+  toggleDisabledFormItems(mapFilterFieldset, FORM_DISABLED);
 };
 
 var enableAllForms = function () {
-  enableFormItems(adFieldsets);
-  enableFormItems(mapFilterSelectList);
-  enableFormItems(mapFilterFieldset);
+  toggleDisabledFormItems(adFieldsets, FORM_ENABLED);
+  toggleDisabledFormItems(mapFilterSelectList, FORM_ENABLED);
+  toggleDisabledFormItems(mapFilterFieldset, FORM_ENABLED);
 };
 
 var onMainMapMousedown = function () {
   enableAllForms();
   fillCurrentAddress();
+  adGuestNumber.value = '1';
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
 
@@ -248,45 +245,33 @@ var fillCurrentAddress = function () {
 var onTypeChange = function () {
   switch (adType.value) {
     case 'flat':
-      adPrice.setAttribute('min', 1000);
-      adPrice.setAttribute('placeholder', 1000);
+      adPrice.min = 1000;
+      adPrice.placeholder = 1000;
       break;
     case 'bungalo':
-      adPrice.setAttribute('min', 0);
-      adPrice.setAttribute('placeholder', 0);
+      adPrice.min = 0;
+      adPrice.placeholder = 0;
       break;
     case 'house':
-      adPrice.setAttribute('min', 5000);
-      adPrice.setAttribute('placeholder', 5000);
+      adPrice.min = 5000;
+      adPrice.placeholder = 5000;
       break;
     case 'palace':
-      adPrice.setAttribute('min', 10000);
-      adPrice.setAttribute('placeholder', 10000);
+      adPrice.min = 10000;
+      adPrice.placeholder = 10000;
       break;
   }
 };
 
 var checkinAndCheckoutSync = function (select, selectToSync) {
-  switch (select.value) {
-    case '12:00':
-      selectToSync.value = '12:00';
-      break;
-    case '13:00':
-      selectToSync.value = '13:00';
-      break;
-    case '14:00':
-      selectToSync.value = '14:00';
-      break;
-  }
+  selectToSync.value = select.value;
 };
 
 var onRoomOrGuestChange = function () {
   adGuestNumber.setCustomValidity('');
   switch (adRoomNumber.value) {
     case '1':
-      if (adGuestNumber.value === '0' ||
-        adGuestNumber.value === '2' ||
-        adGuestNumber.value === '3') {
+      if (adGuestNumber.value !== '1') {
         adGuestNumber.setCustomValidity('«для 1 гостя»');
       }
       break;
@@ -302,9 +287,7 @@ var onRoomOrGuestChange = function () {
       }
       break;
     case '100':
-      if (adGuestNumber.value === '1' ||
-        adGuestNumber.value === '2' ||
-        adGuestNumber.value === '3') {
+      if (adGuestNumber.value !== '0') {
         adGuestNumber.setCustomValidity('«не для гостей»');
       }
       break;
@@ -322,7 +305,6 @@ var onCheckoutChange = function () {
 
 disableAllForms();
 fillInactiveAddress();
-onRoomOrGuestChange();
 
 adRoomNumber.addEventListener('change', onRoomOrGuestChange);
 adGuestNumber.addEventListener('change', onRoomOrGuestChange);
