@@ -40,6 +40,7 @@ var adCheckin = adForm.querySelector('#timein');
 var adCheckout = adForm.querySelector('#timeout');
 var adRoomNumber = adForm.querySelector('#room_number');
 var adGuestNumber = adForm.querySelector('#capacity');
+var currentOpenCard;
 
 var getRandomInteger = function (min, max) {
   return Math.floor(Math.random() * (max + 1 - min)) + min;
@@ -105,13 +106,94 @@ var createAds = function (number) {
   return ads;
 };
 
+var addAdvertisementHandlers = function (ad, pin) {
+  var showAdCard = function () {
+    var card = createCard(ad, pin);
+
+    if (currentOpenCard) {
+      currentOpenCard.hidden = true;
+    }
+
+    map.insertBefore(card, filtersContainer);
+    pin.removeEventListener('click', onAdPinClick);
+    pin.removeEventListener('keydown', onAdPinEnterKeydown);
+    addAdCardHandlers(card);
+    pin.addEventListener('click', function () {
+      if (currentOpenCard) {
+        currentOpenCard.hidden = true;
+      }
+      card.hidden = false;
+      currentOpenCard = card;
+      addAdCardHandlers(card);
+    });
+
+    pin.addEventListener('keydown', function (evt) {
+      if (evt.key === ENTER_KEY) {
+        if (currentOpenCard) {
+          currentOpenCard.hidden = true;
+        }
+        card.hidden = false;
+        currentOpenCard = card;
+      }
+    });
+
+    currentOpenCard = card;
+  };
+
+  var addAdCardHandlers = function (cardShown) {
+    var cardCloseButton = cardShown.querySelector('.popup__close');
+
+    var hideAdCard = function () {
+      cardShown.hidden = true;
+      cardCloseButton.removeEventListener('click', onCloseButtonClick);
+      cardCloseButton.removeEventListener('keydown', onCloseButtonEnterKeydown);
+      document.removeEventListener('keydown', onCardEscKeydown);
+    };
+
+    var onCloseButtonClick = function () {
+      hideAdCard();
+    };
+
+    var onCloseButtonEnterKeydown = function (evt) {
+      if (evt.key === ENTER_KEY) {
+        hideAdCard();
+      }
+    };
+
+    var onCardEscKeydown = function (evt) {
+      if (evt.key === ESC_KEY) {
+        hideAdCard();
+      }
+    };
+
+    cardCloseButton.addEventListener('click', onCloseButtonClick);
+    cardCloseButton.addEventListener('keydown', onCloseButtonEnterKeydown);
+    document.addEventListener('keydown', onCardEscKeydown);
+  };
+
+  var onAdPinClick = function () {
+    showAdCard();
+  };
+
+  var onAdPinEnterKeydown = function (evt) {
+    if (evt.key === ENTER_KEY) {
+      showAdCard();
+    }
+  };
+
+  pin.addEventListener('click', onAdPinClick);
+  pin.addEventListener('keydown', onAdPinEnterKeydown);
+};
+
 var renderAdPin = function (ad) {
   var pin = pinTemplate.cloneNode(true);
 
   pin.style.left = (ad.location.x - 25) + 'px';
   pin.style.top = (ad.location.y - 70) + 'px';
-  pin.querySelector('img').setAttribute('src', ad.author.avatar);
-  pin.querySelector('img').setAttribute('alt', ad.offer.title);
+  pin.querySelector('img').src = ad.author.avatar;
+  pin.querySelector('img').alt = ad.offer.title;
+
+  addAdvertisementHandlers(ad, pin);
 
   return pin;
 };
@@ -166,95 +248,35 @@ var createCard = function (ad) {
   }
 
   card.querySelector('.popup__description').textContent = ad.offer.description;
-  popupPhoto.setAttribute('src', ad.offer.photos[0]);
 
-  if (ad.offer.photos.length > 1) {
-    for (i = 1; i < ad.offer.photos.length; i++) {
+  popupPhotos.removeChild(popupPhoto);
+
+  if (ad.offer.photos.length > 0) {
+    for (i = 0; i < ad.offer.photos.length; i++) {
       var newPopupPhoto = popupPhoto.cloneNode(false);
       popupPhotos.appendChild(newPopupPhoto);
-      newPopupPhoto.setAttribute('src', ad.offer.photos[i]);
+      newPopupPhoto.src = ad.offer.photos[i];
     }
   }
 
-  card.querySelector('.popup__avatar').setAttribute('src', ad.author.avatar);
+  card.querySelector('.popup__avatar').src = ad.author.avatar;
 
   return card;
 };
 
-var createAdsBlock = function (ads) {
-  var pinsBlock = document.createDocumentFragment();
-  var cardsBlock = document.createDocumentFragment();
-  var currentPin;
-  var currentCard;
+var createPinsBlock = function (ads) {
+  var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < ads.length; i++) {
-    currentPin = renderAdPin(ads[i]);
-    currentCard = createCard(ads[i]);
-    currentCard.hidden = true;
-    pinsBlock.appendChild(currentPin);
-    cardsBlock.appendChild(currentCard);
+    fragment.appendChild(renderAdPin(ads[i]));
   }
 
-  mapPinsWrapper.appendChild(pinsBlock);
-  map.insertBefore(cardsBlock, filtersContainer);
+  return fragment;
 };
 
 var toggleDisabledFormItems = function (list, isDisabled) {
   for (var i = 0; i < list.length; i++) {
     list[i].disabled = isDisabled;
-  }
-};
-
-var addPinsHandlers = function () {
-  var mapPins = mapPinsWrapper.querySelectorAll('.map__pins [type="button"]');
-  var mapCards = map.querySelectorAll('.map__card');
-  var closeButton;
-  var currentOpenCard;
-
-  var openAdCard = function (card) {
-    closeButton = card.querySelector('.popup__close');
-    if (currentOpenCard) {
-      currentOpenCard.hidden = true;
-    }
-    currentOpenCard = card;
-    currentOpenCard.hidden = false;
-    closeButton.addEventListener('click', onCloseButtonClick);
-    document.addEventListener('keydown', onCardEscKeydown);
-  };
-
-  var closeAdCard = function () {
-    currentOpenCard.hidden = true;
-    closeButton.removeEventListener('click', onCloseButtonClick);
-    document.removeEventListener('keydown', onCardEscKeydown);
-  };
-
-  var onPinClick = function (pin, card) {
-    pin.addEventListener('click', function () {
-      openAdCard(card);
-    });
-  };
-
-  var onPinEnterKeydown = function (pin, card) {
-    pin.addEventListener('keydown', function (evt) {
-      if (evt.key === ENTER_KEY) {
-        openAdCard(card);
-      }
-    });
-  };
-
-  var onCloseButtonClick = function () {
-    closeAdCard();
-  };
-
-  var onCardEscKeydown = function (evt) {
-    if (evt.key === ESC_KEY) {
-      closeAdCard();
-    }
-  };
-
-  for (var i = 0; i < mapPins.length; i++) {
-    onPinClick(mapPins[i], mapCards[i]);
-    onPinEnterKeydown(mapPins[i], mapCards[i]);
   }
 };
 
@@ -278,8 +300,7 @@ var onMainMapMousedown = function () {
   adForm.classList.remove('ad-form--disabled');
 
   var randomAds = createAds(NUMBER_OF_ADS);
-  createAdsBlock(randomAds);
-  addPinsHandlers();
+  mapPinsWrapper.appendChild(createPinsBlock(randomAds));
 };
 
 var onMainButtonMousedown = function (evt) {
