@@ -40,7 +40,6 @@ var adCheckin = adForm.querySelector('#timein');
 var adCheckout = adForm.querySelector('#timeout');
 var adRoomNumber = adForm.querySelector('#room_number');
 var adGuestNumber = adForm.querySelector('#capacity');
-var currentOpenCard;
 
 var getRandomInteger = function (min, max) {
   return Math.floor(Math.random() * (max + 1 - min)) + min;
@@ -106,85 +105,6 @@ var createAds = function (number) {
   return ads;
 };
 
-var addAdvertisementHandlers = function (ad, pin) {
-  var showAdCard = function () {
-    var card = createCard(ad, pin);
-
-    if (currentOpenCard) {
-      currentOpenCard.hidden = true;
-    }
-
-    map.insertBefore(card, filtersContainer);
-    pin.removeEventListener('click', onAdPinClick);
-    pin.removeEventListener('keydown', onAdPinEnterKeydown);
-    addAdCardHandlers(card);
-    pin.addEventListener('click', function () {
-      if (currentOpenCard) {
-        currentOpenCard.hidden = true;
-      }
-      card.hidden = false;
-      currentOpenCard = card;
-      addAdCardHandlers(card);
-    });
-
-    pin.addEventListener('keydown', function (evt) {
-      if (evt.key === ENTER_KEY) {
-        if (currentOpenCard) {
-          currentOpenCard.hidden = true;
-        }
-        card.hidden = false;
-        currentOpenCard = card;
-      }
-    });
-
-    currentOpenCard = card;
-  };
-
-  var addAdCardHandlers = function (cardShown) {
-    var cardCloseButton = cardShown.querySelector('.popup__close');
-
-    var hideAdCard = function () {
-      cardShown.hidden = true;
-      cardCloseButton.removeEventListener('click', onCloseButtonClick);
-      cardCloseButton.removeEventListener('keydown', onCloseButtonEnterKeydown);
-      document.removeEventListener('keydown', onCardEscKeydown);
-    };
-
-    var onCloseButtonClick = function () {
-      hideAdCard();
-    };
-
-    var onCloseButtonEnterKeydown = function (evt) {
-      if (evt.key === ENTER_KEY) {
-        hideAdCard();
-      }
-    };
-
-    var onCardEscKeydown = function (evt) {
-      if (evt.key === ESC_KEY) {
-        hideAdCard();
-      }
-    };
-
-    cardCloseButton.addEventListener('click', onCloseButtonClick);
-    cardCloseButton.addEventListener('keydown', onCloseButtonEnterKeydown);
-    document.addEventListener('keydown', onCardEscKeydown);
-  };
-
-  var onAdPinClick = function () {
-    showAdCard();
-  };
-
-  var onAdPinEnterKeydown = function (evt) {
-    if (evt.key === ENTER_KEY) {
-      showAdCard();
-    }
-  };
-
-  pin.addEventListener('click', onAdPinClick);
-  pin.addEventListener('keydown', onAdPinEnterKeydown);
-};
-
 var renderAdPin = function (ad) {
   var pin = pinTemplate.cloneNode(true);
 
@@ -193,7 +113,23 @@ var renderAdPin = function (ad) {
   pin.querySelector('img').src = ad.author.avatar;
   pin.querySelector('img').alt = ad.offer.title;
 
-  addAdvertisementHandlers(ad, pin);
+  var renderAdCard = function () {
+    var popupCard = document.querySelector('.map__card.popup');
+    if (popupCard) {
+      popupCard.remove();
+    }
+    map.insertBefore(createCard(ad), filtersContainer);
+  };
+
+  pin.addEventListener('click', function () {
+    renderAdCard();
+  });
+
+  pin.addEventListener('keydown', function (evt) {
+    if (evt.key === ENTER_KEY) {
+      renderAdCard();
+    }
+  });
 
   return pin;
 };
@@ -210,6 +146,7 @@ var getCorrectWord = function (number, words) {
 
 var createCard = function (ad) {
   var card = cardTemplate.cloneNode(true);
+  var cardCloseButton = card.querySelector('.popup__close');
   var popupFeatures = card.querySelector('.popup__features');
   var popupFeature = card.querySelectorAll('.popup__feature');
   var popupPhotos = card.querySelector('.popup__photos');
@@ -260,6 +197,20 @@ var createCard = function (ad) {
   }
 
   card.querySelector('.popup__avatar').src = ad.author.avatar;
+
+  cardCloseButton.addEventListener('click', function () {
+    card.remove();
+  });
+  cardCloseButton.addEventListener('keydown', function (evt) {
+    if (evt.key === ENTER_KEY) {
+      card.remove();
+    }
+  });
+  document.addEventListener('keydown', function (evt) {
+    if (evt.key === ESC_KEY) {
+      card.remove();
+    }
+  });
 
   return card;
 };
