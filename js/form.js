@@ -42,6 +42,8 @@
     },
     fillCurrentAddress: function () {
       adAddress.value = (mainMapPin.offsetLeft + Math.floor(MAIN_MAP_PIN_WIDTH / 2)) + ', ' + (mainMapPin.offsetTop + MAIN_MAP_PIN_HEIGHT);
-    }
+    },
+    MAIN_MAP_PIN_WIDTH: MAIN_MAP_PIN_WIDTH,
+    MAIN_MAP_PIN_HEIGHT: MAIN_MAP_PIN_HEIGHT
   };
 })();
