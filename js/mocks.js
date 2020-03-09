@@ -21,6 +21,10 @@
     NUMBER_OF_ADS: NUMBER_OF_ADS,
     ROOM_WORDS: ROOM_WORDS,
     GUEST_WORDS: GUEST_WORDS,
+    LOCATION_MIN_Y: LOCATION_MIN_Y,
+    LOCATION_MAX_Y: LOCATION_MAX_Y,
+    LOCATION_MIN_X: LOCATION_MIN_X,
+    locationMaxX: locationMaxX,
     generateRandomAd: function (index) {
       var ad = {
         author: {},
