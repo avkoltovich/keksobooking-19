@@ -2,7 +2,6 @@
 
 (function () {
   var map = document.querySelector('.map');
-  var mapPinsWrapper = map.querySelector('.map__pins');
   var mainMapPin = map.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var adGuestNumber = adForm.querySelector('#capacity');
@@ -14,8 +13,7 @@
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
-    var randomAds = window.mocks.createAds(window.mocks.NUMBER_OF_ADS);
-    mapPinsWrapper.appendChild(window.pins.createPinsBlock(randomAds));
+    window.load(window.backend.onSuccess);
   };
 
   var onMainButtonMousedown = function (evt) {
