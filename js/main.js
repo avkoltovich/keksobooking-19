@@ -13,7 +13,7 @@
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
-    window.load(window.backend.onSuccess);
+    window.backend.download(window.data.onSuccess);
   };
 
   var onMainButtonMousedown = function (evt) {
