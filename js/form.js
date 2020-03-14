@@ -31,19 +31,23 @@
     adAddress.value = (mainMapPin.offsetLeft + Math.floor(MAIN_MAP_PIN_WIDTH / 2)) + ', ' + (mainMapPin.offsetTop + Math.floor(MAIN_MAP_PIN_HEIGHT / 2));
   };
 
+  var enableAllForms = function () {
+    toggleDisabledFormItems(adFieldsets, FORM_ENABLED);
+    toggleDisabledFormItems(mapFilterSelectList, FORM_ENABLED);
+    toggleDisabledFormItems(mapFilterFieldset, FORM_ENABLED);
+  };
+
+  var fillCurrentAddress = function () {
+    adAddress.value = (mainMapPin.offsetLeft + Math.floor(MAIN_MAP_PIN_WIDTH / 2)) + ', ' + (mainMapPin.offsetTop + MAIN_MAP_PIN_HEIGHT);
+  };
+
   disableAllForms();
   fillInactiveAddress();
 
   window.form = {
-    enableAllForms: function () {
-      toggleDisabledFormItems(adFieldsets, FORM_ENABLED);
-      toggleDisabledFormItems(mapFilterSelectList, FORM_ENABLED);
-      toggleDisabledFormItems(mapFilterFieldset, FORM_ENABLED);
-    },
-    fillCurrentAddress: function () {
-      adAddress.value = (mainMapPin.offsetLeft + Math.floor(MAIN_MAP_PIN_WIDTH / 2)) + ', ' + (mainMapPin.offsetTop + MAIN_MAP_PIN_HEIGHT);
-    },
     MAIN_MAP_PIN_WIDTH: MAIN_MAP_PIN_WIDTH,
-    MAIN_MAP_PIN_HEIGHT: MAIN_MAP_PIN_HEIGHT
+    MAIN_MAP_PIN_HEIGHT: MAIN_MAP_PIN_HEIGHT,
+    enableAllForms: enableAllForms,
+    fillCurrentAddress: fillCurrentAddress
   };
 })();

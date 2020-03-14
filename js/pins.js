@@ -35,18 +35,22 @@
     return pin;
   };
 
-  window.pins = {
-    createPinsBlock: function (ads) {
-      var fragment = document.createDocumentFragment();
+  var createPinsBlock = function (ads) {
+    var fragment = document.createDocumentFragment();
 
-      for (var i = 0; i < ads.length; i++) {
-        fragment.appendChild(renderAdPin(ads[i]));
-      }
-
-      return fragment;
-    },
-    showPinsBlock: function (ads) {
-      mapPinsWrapper.appendChild(window.pins.createPinsBlock(ads));
+    for (var i = 0; i < ads.length; i++) {
+      fragment.appendChild(renderAdPin(ads[i]));
     }
+
+    return fragment;
+  };
+
+  var showPinsBlock = function (ads) {
+    mapPinsWrapper.appendChild(window.pins.createPinsBlock(ads));
+  };
+
+  window.pins = {
+    createPinsBlock: createPinsBlock,
+    showPinsBlock: showPinsBlock
   };
 })();

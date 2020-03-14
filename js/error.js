@@ -33,9 +33,11 @@
     return errorPopup;
   };
 
+  var showErrorPopup = function (errorText) {
+    main.appendChild(createErrorPopup(errorText));
+  };
+
   window.error = {
-    showErrorPopup: function (errorText) {
-      main.appendChild(createErrorPopup(errorText));
-    }
+    showErrorPopup: showErrorPopup
   };
 })();
