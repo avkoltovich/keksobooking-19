@@ -17,7 +17,7 @@
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
-    window.backend.download(window.data.onSuccess);
+    window.backend.download(window.data.onSuccess, window.data.onError);
   };
 
   var onMainButtonMousedown = function (evt) {

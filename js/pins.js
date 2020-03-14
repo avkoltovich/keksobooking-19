@@ -2,6 +2,7 @@
 
 (function () {
   var map = document.querySelector('.map');
+  var mapPinsWrapper = map.querySelector('.map__pins');
   var filtersContainer = map.querySelector('.map__filters-container');
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
@@ -43,6 +44,9 @@
       }
 
       return fragment;
+    },
+    showPinsBlock: function (ads) {
+      mapPinsWrapper.appendChild(window.pins.createPinsBlock(ads));
     }
   };
 })();

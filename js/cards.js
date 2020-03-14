@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var ROOM_WORDS = ['комнат', 'комната', 'комнаты'];
+  var GUEST_WORDS = ['гостя', 'гостей'];
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   window.cards = {
@@ -36,8 +38,8 @@
       card.querySelector('.popup__type').textContent = roomType;
 
       card.querySelector('.popup__text--capacity').textContent = ad.offer.rooms + ' ' +
-        window.utils.getCorrectWord(ad.offer.rooms, window.mocks.ROOM_WORDS) + ' для ' + ad.offer.guests + ' ' +
-        window.utils.getCorrectWord(ad.offer.guests, window.mocks.GUEST_WORDS);
+        window.utils.getCorrectWord(ad.offer.rooms, ROOM_WORDS) + ' для ' + ad.offer.guests + ' ' +
+        window.utils.getCorrectWord(ad.offer.guests, GUEST_WORDS);
       card.querySelector('.popup__text--time').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
 
       for (var i = popupFeature.length - 1; i >= ad.offer.features.length; i--) {

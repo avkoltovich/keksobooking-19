@@ -1,13 +1,15 @@
 'use strict';
 
 (function () {
-  var mapPinsWrapper = document.querySelector('.map__pins');
   var advertisements = [];
 
   window.data = {
     onSuccess: function (data) {
       window.data.advertisements = data;
-      mapPinsWrapper.appendChild(window.pins.createPinsBlock(window.data.advertisements));
+      window.pins.showPinsBlock(data);
+    },
+    onError: function (error) {
+      window.error.showErrorPopup(error);
     },
     advertisements: advertisements
   };
