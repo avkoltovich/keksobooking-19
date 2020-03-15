@@ -37,7 +37,11 @@
     main.appendChild(createErrorPopup(errorText));
   };
 
+  var onError = function (error) {
+    showErrorPopup(error);
+  };
+
   window.error = {
-    showErrorPopup: showErrorPopup
+    onError: onError
   };
 })();

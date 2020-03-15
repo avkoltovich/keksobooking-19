@@ -9,10 +9,6 @@
     return Math.floor(Math.random() * (max + 1 - min)) + min;
   };
 
-  var getRandomArrayItem = function (array) {
-    return array[window.utils.getRandomInteger(0, array.length - 1)];
-  };
-
   var getMixedArray = function (array) {
     var mixedArray = array.slice();
     var j;
@@ -47,7 +43,6 @@
     ENTER_KEY: ENTER_KEY,
     MAIN_MOUSE_BUTTON: MAIN_MOUSE_BUTTON,
     getRandomInteger: getRandomInteger,
-    getRandomArrayItem: getRandomArrayItem,
     getMixedArray: getMixedArray,
     getClippedArray: getClippedArray,
     getCorrectWord: getCorrectWord

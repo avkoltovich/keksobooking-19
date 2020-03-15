@@ -3,18 +3,16 @@
 (function () {
   var advertisements = [];
 
-  var onSuccess = function (data) {
-    window.data.advertisements = data;
-    window.pins.showPinsBlock(data);
+  var saveData = function (data) {
+    advertisements = data;
   };
 
-  var onError = function (error) {
-    window.error.showErrorPopup(error);
+  var shareData = function () {
+    return advertisements;
   };
 
   window.data = {
-    advertisements: advertisements,
-    onSuccess: onSuccess,
-    onError: onError
+    saveData: saveData,
+    shareData: shareData
   };
 })();
