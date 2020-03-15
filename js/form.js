@@ -41,13 +41,12 @@
     adAddress.value = (mainMapPin.offsetLeft + Math.floor(MAIN_MAP_PIN_WIDTH / 2)) + ', ' + (mainMapPin.offsetTop + MAIN_MAP_PIN_HEIGHT);
   };
 
-  disableAllForms();
-  fillInactiveAddress();
-
   window.form = {
     MAIN_MAP_PIN_WIDTH: MAIN_MAP_PIN_WIDTH,
     MAIN_MAP_PIN_HEIGHT: MAIN_MAP_PIN_HEIGHT,
     enableAll: enableAllForms,
+    disableAll: disableAllForms,
+    fillInactiveAddress: fillInactiveAddress,
     fillCurrentAddress: fillCurrentAddress
   };
 })();
