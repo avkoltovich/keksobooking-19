@@ -10,14 +10,23 @@
   var adForm = document.querySelector('.ad-form');
   var adGuestNumber = adForm.querySelector('#capacity');
 
+  var onSuccess = function (data) {
+    window.data.save(data);
+    window.pins.show(data);
+  };
+
+  var onError = function (error) {
+    window.error.show(error);
+  };
+
   var onMainMapMousedown = function () {
-    window.form.enableAllForms();
+    window.form.enableAll();
     window.form.fillCurrentAddress();
     adGuestNumber.value = '1';
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
-    window.backend.download(window.success.onSuccess, window.error.onError);
+    window.backend.download(onSuccess, onError);
   };
 
   var onMainButtonMousedown = function (evt) {

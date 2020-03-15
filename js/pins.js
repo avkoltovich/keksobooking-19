@@ -19,7 +19,7 @@
       if (popupCard) {
         popupCard.remove();
       }
-      map.insertBefore(window.cards.createCard(ad), filtersContainer);
+      map.insertBefore(window.cards.create(ad), filtersContainer);
     };
 
     pin.addEventListener('click', function () {
@@ -46,11 +46,10 @@
   };
 
   var showPinsBlock = function (ads) {
-    mapPinsWrapper.appendChild(window.pins.createPinsBlock(ads));
+    mapPinsWrapper.appendChild(createPinsBlock(ads));
   };
 
   window.pins = {
-    createPinsBlock: createPinsBlock,
-    showPinsBlock: showPinsBlock
+    show: showPinsBlock
   };
 })();

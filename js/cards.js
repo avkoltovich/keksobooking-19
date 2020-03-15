@@ -77,6 +77,6 @@
   };
 
   window.cards = {
-    createCard: createCard
+    create: createCard
   };
 })();

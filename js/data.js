@@ -7,12 +7,12 @@
     advertisements = data;
   };
 
-  var shareData = function () {
+  var getData = function () {
     return advertisements;
   };
 
   window.data = {
-    saveData: saveData,
-    shareData: shareData
+    save: saveData,
+    get: getData
   };
 })();

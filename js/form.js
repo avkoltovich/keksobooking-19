@@ -47,7 +47,7 @@
   window.form = {
     MAIN_MAP_PIN_WIDTH: MAIN_MAP_PIN_WIDTH,
     MAIN_MAP_PIN_HEIGHT: MAIN_MAP_PIN_HEIGHT,
-    enableAllForms: enableAllForms,
+    enableAll: enableAllForms,
     fillCurrentAddress: fillCurrentAddress
   };
 })();
