@@ -1,13 +1,17 @@
 'use strict';
 
 (function () {
-  var MAIN_MAP_PIN_WIDTH = 65;
-  var MAIN_MAP_PIN_HEIGHT = 87;
+  var MainMapPin = {
+    WIDTH: 65,
+    HEIGHT: 87
+  };
 
-  var FORM_ENABLED = false;
-  var FORM_DISABLED = true;
+  var FormStatus = {
+    ENABLED: false,
+    DISABLED: true
+  };
 
-  var mainMapPin = document.querySelector('.map__pin--main');
+  var mapPinMain = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var adFieldsets = adForm.querySelectorAll('fieldset');
   var mapFilterForm = document.querySelector('.map__filters');
@@ -22,28 +26,27 @@
   };
 
   var disableAllForms = function () {
-    toggleDisabledFormItems(adFieldsets, FORM_DISABLED);
-    toggleDisabledFormItems(mapFilterSelectList, FORM_DISABLED);
-    toggleDisabledFormItems(mapFilterFieldset, FORM_DISABLED);
+    toggleDisabledFormItems(adFieldsets, FormStatus.DISABLED);
+    toggleDisabledFormItems(mapFilterSelectList, FormStatus.DISABLED);
+    toggleDisabledFormItems(mapFilterFieldset, FormStatus.DISABLED);
   };
 
   var fillInactiveAddress = function () {
-    adAddress.value = (mainMapPin.offsetLeft + Math.floor(MAIN_MAP_PIN_WIDTH / 2)) + ', ' + (mainMapPin.offsetTop + Math.floor(MAIN_MAP_PIN_HEIGHT / 2));
+    adAddress.value = (mapPinMain.offsetLeft + Math.floor(MainMapPin.WIDTH / 2)) + ', ' + (mapPinMain.offsetTop + Math.floor(MainMapPin.HEIGHT / 2));
   };
 
   var enableAllForms = function () {
-    toggleDisabledFormItems(adFieldsets, FORM_ENABLED);
-    toggleDisabledFormItems(mapFilterSelectList, FORM_ENABLED);
-    toggleDisabledFormItems(mapFilterFieldset, FORM_ENABLED);
+    toggleDisabledFormItems(adFieldsets, FormStatus.ENABLED);
+    toggleDisabledFormItems(mapFilterSelectList, FormStatus.ENABLED);
+    toggleDisabledFormItems(mapFilterFieldset, FormStatus.ENABLED);
   };
 
   var fillCurrentAddress = function () {
-    adAddress.value = (mainMapPin.offsetLeft + Math.floor(MAIN_MAP_PIN_WIDTH / 2)) + ', ' + (mainMapPin.offsetTop + MAIN_MAP_PIN_HEIGHT);
+    adAddress.value = (mapPinMain.offsetLeft + Math.floor(MainMapPin.WIDTH / 2)) + ', ' + (mapPinMain.offsetTop + MainMapPin.HEIGHT);
   };
 
   window.form = {
-    MAIN_MAP_PIN_WIDTH: MAIN_MAP_PIN_WIDTH,
-    MAIN_MAP_PIN_HEIGHT: MAIN_MAP_PIN_HEIGHT,
+    MainMapPin: MainMapPin,
     enableAll: enableAllForms,
     disableAll: disableAllForms,
     fillInactiveAddress: fillInactiveAddress,

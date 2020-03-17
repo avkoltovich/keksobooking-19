@@ -24,7 +24,7 @@
     });
 
     pin.addEventListener('keydown', function (evt) {
-      if (evt.key === window.utils.ENTER_KEY) {
+      if (evt.key === window.utils.Key.ENTER) {
         renderAdCard();
       }
     });
@@ -32,18 +32,20 @@
     return pin;
   };
 
-  var createPinsBlock = function (ads) {
+  var createPinsBlock = function (ads, maxNumber) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < ads.length; i++) {
+    var number = ads.length >= maxNumber ? maxNumber : ads.length;
+
+    for (var i = 0; i < number; i++) {
       fragment.appendChild(renderAdPin(ads[i]));
     }
 
     return fragment;
   };
 
-  var showPinsBlock = function (ads) {
-    mapPinsWrapper.appendChild(createPinsBlock(ads));
+  var showPinsBlock = function (ads, maxNumber) {
+    mapPinsWrapper.appendChild(createPinsBlock(ads, maxNumber));
   };
 
   var removePinsBlock = function () {

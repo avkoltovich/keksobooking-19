@@ -1,17 +1,26 @@
 'use strict';
 
 (function () {
-  var DOWNLOAD_URL = 'https://js.dump.academy/keksobooking/data';
-  var UPLOAD_URL = 'https://js.dump.academy/keksobooking';
-  var TIMEOUT_IN_MS = 10000;
+  var Url = {
+    DOWNLOAD: 'https://js.dump.academy/keksobooking/data',
+    UPLOAD: 'https://js.dump.academy/keksobooking'
+  };
+
+  var Timeout = {
+    IN_MS: 10000
+  };
+
   var StatusCode = {
-    OK: 200,
-    BAD_REQUEST: 400,
-    FORBIDDEN: 403,
-    NOT_FOUND: 404,
-    INTERNAL_SERVER_ERROR: 500,
-    BAD_GATEWAY: 502,
-    SERVICE_UNAVAILABLE: 503
+    OK: 200
+  };
+
+  var codeMap = {
+    '400': 'Ошибка 400: Плохой запрос',
+    '403': 'Ошибка 403: Запрещено',
+    '404': 'Ошибка 404: Не найден',
+    '500': 'Ошибка 500: Внутренняя ошибка сервера',
+    '502': 'Ошибка 502: Плохой шлюз',
+    '503': 'Ошибка 503: Сервис недоступен'
   };
 
   var getServerResponse = function (xhr, onSuccess, onError) {
@@ -20,29 +29,10 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === StatusCode.OK) {
         onSuccess(xhr.response);
+      } else if (codeMap[xhr.status]) {
+        onError(codeMap[xhr.status]);
       } else {
-        switch (xhr.status) {
-          case StatusCode.BAD_REQUEST:
-            onError('Ошибка 400: Плохой запрос');
-            break;
-          case StatusCode.FORBIDDEN:
-            onError('Ошибка 403: Запрещено');
-            break;
-          case StatusCode.NOT_FOUND:
-            onError('Ошибка 404: Не найден');
-            break;
-          case StatusCode.INTERNAL_SERVER_ERROR:
-            onError('Ошибка 500: Внутренняя ошибка сервера');
-            break;
-          case StatusCode.BAD_GATEWAY:
-            onError('Ошибка 502: Плохой шлюз');
-            break;
-          case StatusCode.SERVICE_UNAVAILABLE:
-            onError('Ошибка 503: Сервис недоступен');
-            break;
-          default:
-            onError('Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText);
-        }
+        onError('Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText);
       }
     });
     xhr.addEventListener('error', function () {
@@ -52,20 +42,20 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = TIMEOUT_IN_MS;
+    xhr.timeout = Timeout.IN_MS;
   };
 
   var download = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     getServerResponse(xhr, onSuccess, onError);
-    xhr.open('GET', DOWNLOAD_URL);
+    xhr.open('GET', Url.DOWNLOAD);
     xhr.send();
   };
 
   var upload = function (data, onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     getServerResponse(xhr, onSuccess, onError);
-    xhr.open('POST', UPLOAD_URL);
+    xhr.open('POST', Url.UPLOAD);
     xhr.send(data);
   };
 
