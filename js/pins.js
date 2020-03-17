@@ -15,11 +15,8 @@
     pin.querySelector('img').alt = ad.offer.title;
 
     var renderAdCard = function () {
-      var popupCard = document.querySelector('.map__card.popup');
-      if (popupCard) {
-        popupCard.remove();
-      }
-      map.insertBefore(window.cards.create(ad), filtersContainer);
+      window.card.remove();
+      map.insertBefore(window.card.create(ad), filtersContainer);
     };
 
     pin.addEventListener('click', function () {
@@ -49,7 +46,15 @@
     mapPinsWrapper.appendChild(createPinsBlock(ads));
   };
 
+  var removePinsBlock = function () {
+    var pinsBlock = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = 0; i < pinsBlock.length; i++) {
+      pinsBlock[i].remove();
+    }
+  };
+
   window.pins = {
-    show: showPinsBlock
+    show: showPinsBlock,
+    remove: removePinsBlock
   };
 })();

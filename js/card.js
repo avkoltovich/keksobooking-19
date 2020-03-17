@@ -76,7 +76,15 @@
     return card;
   };
 
-  window.cards = {
-    create: createCard
+  var removePopupCard = function () {
+    var popupCard = document.querySelector('.map__card.popup');
+    if (popupCard) {
+      popupCard.remove();
+    }
+  };
+
+  window.card = {
+    create: createCard,
+    remove: removePopupCard
   };
 })();

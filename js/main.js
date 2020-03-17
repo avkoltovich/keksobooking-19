@@ -8,25 +8,68 @@
   var locationMaxX = map.offsetWidth - 25;
   var mainMapPin = map.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
+  var resetButton = document.querySelector('.ad-form__reset');
   var adGuestNumber = adForm.querySelector('#capacity');
+  var mainMapPinDefaultCoords = {
+    x: '570px',
+    y: '375px'
+  };
 
-  var onSuccess = function (data) {
+  var setActiveState = function () {
+    window.form.enableAll();
+    window.form.fillCurrentAddress();
+    adGuestNumber.value = '1';
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    window.backend.download(onSuccessDownload, onError);
+
+    adForm.addEventListener('submit', onAdFormSubmit);
+    resetButton.addEventListener('click', onAdFormReset);
+  };
+
+  var setInactiveState = function () {
+    adForm.reset();
+    window.form.disableAll();
+    map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+    window.card.remove();
+    window.pins.remove();
+    mainMapPin.style.left = mainMapPinDefaultCoords.x;
+    mainMapPin.style.top = mainMapPinDefaultCoords.y;
+    window.form.fillInactiveAddress();
+
+    adForm.removeEventListener('submit', onAdFormSubmit);
+    resetButton.removeEventListener('click', onAdFormReset);
+    mainMapPin.addEventListener('mousedown', onMainButtonMousedown);
+    mainMapPin.addEventListener('keydown', onEnterKeydown);
+  };
+
+  var onSuccessDownload = function (data) {
     window.data.save(data);
     window.pins.show(data);
+  };
+
+  var onSuccessUpload = function () {
+    window.success.show();
+    setInactiveState();
   };
 
   var onError = function (error) {
     window.error.show(error);
   };
 
-  var onMainMapMousedown = function () {
-    window.form.enableAll();
-    window.form.fillCurrentAddress();
-    adGuestNumber.value = '1';
-    map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
+  var onAdFormSubmit = function (evt) {
+    window.backend.upload(new FormData(adForm), onSuccessUpload, onError);
+    evt.preventDefault();
+  };
 
-    window.backend.download(onSuccess, onError);
+  var onAdFormReset = function (evt) {
+    setInactiveState();
+    evt.preventDefault();
+  };
+
+  var onMainMapMousedown = function () {
+    setActiveState();
   };
 
   var onMainButtonMousedown = function (evt) {
@@ -99,6 +142,9 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   };
+
+  window.form.disableAll();
+  window.form.fillInactiveAddress();
 
   mainMapPin.addEventListener('mousedown', onMainButtonMousedown);
   mainMapPin.addEventListener('keydown', onEnterKeydown);
