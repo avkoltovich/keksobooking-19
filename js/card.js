@@ -1,8 +1,18 @@
 'use strict';
 
 (function () {
-  var ROOM_WORDS = ['комнат', 'комната', 'комнаты'];
-  var GUEST_WORDS = ['гостя', 'гостей'];
+  var Word = {
+    ROOMS: ['комнат', 'комната', 'комнаты'],
+    GUESTS: ['гостя', 'гостей']
+  };
+
+  var roomTypeMap = {
+    flat: 'Квартира',
+    bungalo: 'Бунгало',
+    house: 'Дом',
+    palace: 'Дворец'
+  };
+
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   var createCard = function (ad) {
@@ -17,28 +27,13 @@
     card.querySelector('.popup__text--address').textContent = ad.offer.address;
     card.querySelector('.popup__text--price').textContent = ad.offer.price + '₽/ночь';
 
-    var roomType = '';
-
-    switch (ad.offer.type) {
-      case 'flat':
-        roomType = 'Квартира';
-        break;
-      case 'bungalo':
-        roomType = 'Бунгало';
-        break;
-      case 'house':
-        roomType = 'Дом';
-        break;
-      case 'palace':
-        roomType = 'Дворец';
-        break;
-    }
+    var roomType = roomTypeMap[ad.offer.type];
 
     card.querySelector('.popup__type').textContent = roomType;
 
     card.querySelector('.popup__text--capacity').textContent = ad.offer.rooms + ' ' +
-      window.utils.getCorrectWord(ad.offer.rooms, ROOM_WORDS) + ' для ' + ad.offer.guests + ' ' +
-      window.utils.getCorrectWord(ad.offer.guests, GUEST_WORDS);
+      window.utils.getCorrectWord(ad.offer.rooms, Word.ROOMS) + ' для ' + ad.offer.guests + ' ' +
+      window.utils.getCorrectWord(ad.offer.guests, Word.GUESTS);
     card.querySelector('.popup__text--time').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
 
     for (var i = popupFeature.length - 1; i >= ad.offer.features.length; i--) {
@@ -63,12 +58,12 @@
       card.remove();
     });
     cardCloseButton.addEventListener('keydown', function (evt) {
-      if (evt.key === window.utils.ENTER_KEY) {
+      if (evt.key === window.utils.Key.ENTER) {
         card.remove();
       }
     });
     document.addEventListener('keydown', function (evt) {
-      if (evt.key === window.utils.ESC_KEY) {
+      if (evt.key === window.utils.Key.ESC) {
         card.remove();
       }
     });

@@ -9,25 +9,16 @@
   var adRoomNumber = adForm.querySelector('#room_number');
   var adGuestNumber = adForm.querySelector('#capacity');
 
+  var adPriceMap = {
+    flat: 1000,
+    bungalo: 0,
+    house: 5000,
+    palace: 10000
+  };
+
   var onTypeChange = function () {
-    switch (adType.value) {
-      case 'flat':
-        adPrice.min = 1000;
-        adPrice.placeholder = 1000;
-        break;
-      case 'bungalo':
-        adPrice.min = 0;
-        adPrice.placeholder = 0;
-        break;
-      case 'house':
-        adPrice.min = 5000;
-        adPrice.placeholder = 5000;
-        break;
-      case 'palace':
-        adPrice.min = 10000;
-        adPrice.placeholder = 10000;
-        break;
-    }
+    adPrice.min = adPriceMap[adType.value];
+    adPrice.placeholder = adPriceMap[adType.value];
   };
 
   var checkinAndCheckoutSync = function (select, selectToSync) {

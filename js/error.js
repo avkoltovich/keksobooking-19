@@ -20,12 +20,12 @@
       }
     });
     errorButton.addEventListener('keydown', function (evt) {
-      if (evt.key === window.utils.ENTER_KEY) {
+      if (evt.key === window.utils.Key.ENTER) {
         errorPopup.remove();
       }
     });
     document.addEventListener('keydown', function (evt) {
-      if (evt.key === window.utils.ESC_KEY) {
+      if (evt.key === window.utils.Key.ESC) {
         errorPopup.remove();
       }
     });

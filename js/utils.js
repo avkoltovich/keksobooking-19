@@ -1,9 +1,14 @@
 'use strict';
 
 (function () {
-  var ESC_KEY = 'Escape';
-  var ENTER_KEY = 'Enter';
-  var MAIN_MOUSE_BUTTON = 0;
+  var Key = {
+    ESC: 'Escape',
+    ENTER: 'Enter'
+  };
+
+  var MouseButton = {
+    MAIN: 0
+  };
 
   var getCorrectWord = function (number, words) {
     if (words.length === 2) {
@@ -16,9 +21,8 @@
   };
 
   window.utils = {
-    ESC_KEY: ESC_KEY,
-    ENTER_KEY: ENTER_KEY,
-    MAIN_MOUSE_BUTTON: MAIN_MOUSE_BUTTON,
+    Key: Key,
+    MouseButton: MouseButton,
     getCorrectWord: getCorrectWord
   };
 })();
