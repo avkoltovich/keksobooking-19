@@ -29,7 +29,7 @@
 
   var getFilteredAdsByPrice = function (ad) {
     return housingPrice.value === 'any' ? true :
-    priceRangeMap[housingPrice.value].MIN <= ad.offer.price && priceRangeMap[housingPrice.value].MAX >= ad.offer.price;
+      priceRangeMap[housingPrice.value].MIN <= ad.offer.price && priceRangeMap[housingPrice.value].MAX >= ad.offer.price;
   };
 
   var getFilteredAdsByRooms = function (ad) {
@@ -53,11 +53,23 @@
   };
 
   var getFilteredAds = function (ads) {
-    var filteredAds = ads.filter(getFilteredAdsByType)
-      .filter(getFilteredAdsByPrice)
-      .filter(getFilteredAdsByRooms)
-      .filter(getFilteredAdsByGuests)
-      .filter(getFilteredAdsByFeatures);
+    var filteredAds = ads;
+    var checkedFeatures = getCheckedFeatures();
+    if (housingType.value !== 'any') {
+      filteredAds = filteredAds.filter(getFilteredAdsByType);
+    }
+    if (housingPrice.value !== 'any') {
+      filteredAds = filteredAds.filter(getFilteredAdsByPrice);
+    }
+    if (housingRooms.value !== 'any') {
+      filteredAds = filteredAds.filter(getFilteredAdsByRooms);
+    }
+    if (housingGuests.value !== 'any') {
+      filteredAds = filteredAds.filter(getFilteredAdsByGuests);
+    }
+    if (checkedFeatures.length > 0) {
+      filteredAds = filteredAds.filter(getFilteredAdsByFeatures);
+    }
     return filteredAds;
   };
 
