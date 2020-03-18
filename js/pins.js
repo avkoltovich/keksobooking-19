@@ -54,9 +54,9 @@
 
   var removePinsBlock = function () {
     var pinsBlock = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = 0; i < pinsBlock.length; i++) {
-      pinsBlock[i].remove();
-    }
+    pinsBlock.forEach(function (item) {
+      item.remove();
+    });
   };
 
   window.pins = {

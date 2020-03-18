@@ -45,11 +45,11 @@
     popupPhotos.removeChild(popupPhoto);
 
     if (ad.offer.photos.length > 0) {
-      for (i = 0; i < ad.offer.photos.length; i++) {
+      ad.offer.photos.forEach(function (item) {
         var newPopupPhoto = popupPhoto.cloneNode(false);
         popupPhotos.appendChild(newPopupPhoto);
-        newPopupPhoto.src = ad.offer.photos[i];
-      }
+        newPopupPhoto.src = item;
+      });
     }
 
     card.querySelector('.popup__avatar').src = ad.author.avatar;

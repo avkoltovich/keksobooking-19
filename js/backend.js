@@ -10,11 +10,8 @@
     IN_MS: 10000
   };
 
-  var StatusCode = {
-    OK: 200
-  };
-
   var codeMap = {
+    '200': 200,
     '400': 'Ошибка 400: Плохой запрос',
     '403': 'Ошибка 403: Запрещено',
     '404': 'Ошибка 404: Не найден',
@@ -27,7 +24,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === StatusCode.OK) {
+      if (xhr.status === codeMap['200']) {
         onSuccess(xhr.response);
       } else if (codeMap[xhr.status]) {
         onError(codeMap[xhr.status]);

@@ -19,8 +19,6 @@
   var resetButton = document.querySelector('.ad-form__reset');
   var adGuestNumber = adForm.querySelector('#capacity');
   var mapFilters = document.querySelector('.map__filters');
-  var housingType = mapFilters.querySelector('#housing-type');
-  var housingPrice = mapFilters.querySelector('#housing-price');
 
   var setActiveState = function () {
     window.form.enableAll();
@@ -32,8 +30,7 @@
 
     adForm.addEventListener('submit', onAdFormSubmit);
     resetButton.addEventListener('click', onAdFormReset);
-    housingType.addEventListener('change', onHousingTypeChange);
-    housingPrice.addEventListener('change', onPriceTypeChange);
+    mapFilters.addEventListener('change', onMapFilterChange);
   };
 
   var setInactiveState = function () {
@@ -51,8 +48,7 @@
     resetButton.removeEventListener('click', onAdFormReset);
     mapPinMain.addEventListener('mousedown', onMainButtonMousedown);
     mapPinMain.addEventListener('keydown', onEnterKeydown);
-    housingType.removeEventListener('change', onHousingTypeChange);
-    housingPrice.removeEventListener('change', onPriceTypeChange);
+    mapFilters.removeEventListener('change', onMapFilterChange);
   };
 
   var onSuccessDownload = function (data) {
@@ -154,19 +150,12 @@
     document.addEventListener('mouseup', onMouseUp);
   };
 
-  var onHousingTypeChange = function (evt) {
+  var onMapFilterChange = window.debounce(function (evt) {
     evt.preventDefault();
     window.card.remove();
     window.pins.remove();
-    window.pins.show(window.filter.getFilteredAds());
-  };
-
-  var onPriceTypeChange = function (evt) {
-    evt.preventDefault();
-    window.card.remove();
-    window.pins.remove();
-    window.pins.show(window.filter.getFilteredAdsByPrice());
-  };
+    window.pins.show(window.filter.getFilteredAds(window.data.get()));
+  });
 
   window.form.disableAll();
   window.form.fillInactiveAddress();
