@@ -95,7 +95,7 @@
     }
   };
 
-  var checkСonfines = function (min, max, current) {
+  var checkMapBorder = function (min, max, current) {
     if (current < min) {
       return min;
     } else if (current > max) {
@@ -133,8 +133,8 @@
       var maxX = Location.MAX_X - Math.floor(window.form.MainMapPin.WIDTH / 2);
       var currentX = mapPinMain.offsetLeft - shift.x;
 
-      mapPinMain.style.top = checkСonfines(minY, maxY, currentY) + 'px';
-      mapPinMain.style.left = checkСonfines(minX, maxX, currentX) + 'px';
+      mapPinMain.style.top = checkMapBorder(minY, maxY, currentY) + 'px';
+      mapPinMain.style.left = checkMapBorder(minX, maxX, currentX) + 'px';
 
       window.form.fillCurrentAddress();
     };
