@@ -24,20 +24,19 @@
   var housingFeatures = mapFilters.querySelector('#housing-features');
 
   var getFilteredAdsByType = function (ad) {
-    return housingType.value === 'any' ? true : housingType.value === ad.offer.type;
+    return housingType.value === ad.offer.type;
   };
 
   var getFilteredAdsByPrice = function (ad) {
-    return housingPrice.value === 'any' ? true :
-      priceRangeMap[housingPrice.value].MIN <= ad.offer.price && priceRangeMap[housingPrice.value].MAX >= ad.offer.price;
+    return priceRangeMap[housingPrice.value].MIN <= ad.offer.price && priceRangeMap[housingPrice.value].MAX >= ad.offer.price;
   };
 
   var getFilteredAdsByRooms = function (ad) {
-    return housingRooms.value === 'any' ? true : (parseFloat(housingRooms.value) === ad.offer.rooms);
+    return (parseFloat(housingRooms.value) === ad.offer.rooms);
   };
 
   var getFilteredAdsByGuests = function (ad) {
-    return housingGuests.value === 'any' ? true : (parseFloat(housingGuests.value) === ad.offer.guests);
+    return (parseFloat(housingGuests.value) === ad.offer.guests);
   };
 
   var getCheckedFeatures = function () {
