@@ -4,7 +4,8 @@
   var Location = {
     MIN_Y: 130,
     MAX_Y: 630,
-    MIN_X: 25
+    MIN_X: 0,
+    MAX_X: 1200
   };
 
   var MainMapPinDefaultCoords = {
@@ -13,7 +14,6 @@
   };
 
   var map = document.querySelector('.map');
-  var locationMaxX = map.offsetWidth - 25;
   var mapPinMain = map.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var resetButton = document.querySelector('.ad-form__reset');
@@ -95,6 +95,15 @@
     }
   };
 
+  var checkСonfines = function (min, max, current) {
+    if (current < min) {
+      return min;
+    } else if (current > max) {
+      return max;
+    }
+    return current;
+  };
+
   var onMainPinMove = function (evt) {
     evt.preventDefault();
 
@@ -116,24 +125,16 @@
         y: moveEvt.clientY
       };
 
-      var currentX = mapPinMain.offsetLeft + Math.floor(window.form.MainMapPin.WIDTH / 2);
-      var currentY = mapPinMain.offsetTop + window.form.MainMapPin.HEIGHT;
+      var minY = Location.MIN_Y - window.form.MainMapPin.HEIGHT;
+      var maxY = Location.MAX_Y - window.form.MainMapPin.HEIGHT;
+      var currentY = mapPinMain.offsetTop - shift.y;
 
-      if (currentY >= Location.MIN_Y && currentY <= Location.MAX_Y) {
-        mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
-      } else if (currentY < Location.MIN_Y) {
-        mapPinMain.style.top = Location.MIN_Y - window.form.MainMapPin.HEIGHT + 'px';
-      } else if (currentY > Location.MAX_Y) {
-        mapPinMain.style.top = Location.MAX_Y - window.form.MainMapPin.HEIGHT + 'px';
-      }
+      var minX = Location.MIN_X - Math.floor(window.form.MainMapPin.WIDTH / 2);
+      var maxX = Location.MAX_X - Math.floor(window.form.MainMapPin.WIDTH / 2);
+      var currentX = mapPinMain.offsetLeft - shift.x;
 
-      if (currentX >= Location.MIN_X && currentX <= locationMaxX) {
-        mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
-      } else if (currentX < Location.MIN_X) {
-        mapPinMain.style.left = Location.MIN_X - Math.floor(window.form.MainMapPin.WIDTH / 2) + 'px';
-      } else if (currentX > locationMaxX) {
-        mapPinMain.style.left = locationMaxX - Math.floor(window.form.MainMapPin.WIDTH / 2) + 'px';
-      }
+      mapPinMain.style.top = checkСonfines(minY, maxY, currentY) + 'px';
+      mapPinMain.style.left = checkСonfines(minX, maxX, currentX) + 'px';
 
       window.form.fillCurrentAddress();
     };
