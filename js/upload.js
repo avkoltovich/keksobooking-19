@@ -44,7 +44,7 @@
     return matches ? matches : false;
   };
 
-  var clearUpload = function () {
+  var clearPhotosPreviewContainer = function () {
     avatarPreview.src = AVATAR_DEFAULT;
     photosPreviewContainer.querySelectorAll('.ad-form__photo').forEach(function (photo) {
       photo.remove();
@@ -55,6 +55,6 @@
     avatar: adFormAvatarReader,
     photo: adFormPhotoReader,
     check: checkFile,
-    clear: clearUpload
+    clear: clearPhotosPreviewContainer
   };
 })();
