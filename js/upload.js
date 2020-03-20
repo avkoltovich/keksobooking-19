@@ -49,7 +49,7 @@
     photosPreviewContainer.querySelectorAll('.ad-form__photo').forEach(function (photo) {
       photo.remove();
     });
-  }
+  };
 
   window.upload = {
     avatar: adFormAvatarReader,
