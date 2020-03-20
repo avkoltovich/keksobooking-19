@@ -5,62 +5,56 @@
   var AVATAR_DEFAULT = 'img/muffin-grey.svg';
 
   var adForm = document.querySelector('.ad-form');
-  var avatarChoose = adForm.querySelector('.ad-form__field input[type=file]');
   var avatarPreview = adForm.querySelector('.ad-form-header__preview img');
-  var photosChoose = adForm.querySelector('.ad-form__upload input[type=file]');
-  var photosPreview = adForm.querySelector('.ad-form__photo');
+  var photosPreviewContainer = adForm.querySelector('.ad-form__photo-container');
+  var photosPreview = photosPreviewContainer.querySelector('.ad-form__photo');
 
-  avatarChoose.addEventListener('change', function () {
-    var file = avatarChoose.files[0];
+  var adFormAvatarReader = function (file) {
+    var reader = new FileReader();
 
-    if (checkFiles(file, window.backend.error)) {
-      var reader = new FileReader();
+    reader.addEventListener('load', function () {
+      avatarPreview.src = reader.result;
+    });
 
-      reader.addEventListener('load', function () {
-        avatarPreview.src = reader.result;
-      });
+    reader.readAsDataURL(file);
+  };
 
-      reader.readAsDataURL(file);
-    }
-  });
+  var adFormPhotoReader = function (file) {
+    var reader = new FileReader();
 
-  photosChoose.addEventListener('change', function () {
-    var file = photosChoose.files[0];
+    reader.addEventListener('load', function () {
+      var photoContainer = photosPreview.cloneNode(false);
+      var photo = document.createElement('img');
+      photo.style = 'display: block; width: 100%; height: 100%';
+      photo.src = reader.result;
+      photoContainer.appendChild(photo);
+      photosPreviewContainer.appendChild(photoContainer);
+    });
 
-    if (checkFiles(file, window.backend.error)) {
-      var reader = new FileReader();
+    reader.readAsDataURL(file);
+  };
 
-      reader.addEventListener('load', function () {
-        photosPreview.style = 'display: flex; flex-wrap: wrap; width: 300px;';
-        var photo = document.createElement('img');
-        photo.classList.add('house-photo');
-        photo.style = 'width: 70px; height: 70px; margin-right: 5px; margin-bottom: 5px';
-        photo.src = reader.result;
-        photosPreview.appendChild(photo);
-      });
-
-      reader.readAsDataURL(file);
-    }
-  });
-
-  function checkFiles(file, ifError) {
+  var checkFile = function (file) {
     var fileName = file.name.toLowerCase();
 
     var matches = FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
     });
 
-    return matches ? matches : ifError('Выбранный файл не картинка');
-  }
+    return matches ? matches : false;
+  };
 
-  function uploadRemove() {
+  var clearUpload = function () {
     avatarPreview.src = AVATAR_DEFAULT;
-    photosPreview.querySelectorAll('.house-photo').forEach(function (photo) {
+    photosPreviewContainer.querySelectorAll('.ad-form__photo').forEach(function (photo) {
       photo.remove();
     });
   }
 
   window.upload = {
-    remove: uploadRemove
+    avatar: adFormAvatarReader,
+    photo: adFormPhotoReader,
+    check: checkFile,
+    clear: clearUpload
   };
 })();

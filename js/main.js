@@ -16,6 +16,8 @@
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
+  var avatarChoose = adForm.querySelector('.ad-form__field input[type=file]');
+  var photosChoose = adForm.querySelector('.ad-form__upload input[type=file]');
   var resetButton = document.querySelector('.ad-form__reset');
   var adGuestNumber = adForm.querySelector('#capacity');
   var mapFilters = document.querySelector('.map__filters');
@@ -31,10 +33,13 @@
     adForm.addEventListener('submit', onAdFormSubmit);
     resetButton.addEventListener('click', onAdFormReset);
     mapFilters.addEventListener('change', onMapFilterChange);
+    avatarChoose.addEventListener('change', onAdFormAvatarChange);
+    photosChoose.addEventListener('change', onAdFormPhotosChange);
   };
 
   var setInactiveState = function () {
     adForm.reset();
+    window.upload.clear();
     window.form.disableAll();
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
@@ -49,6 +54,8 @@
     mapPinMain.addEventListener('mousedown', onMainButtonMousedown);
     mapPinMain.addEventListener('keydown', onEnterKeydown);
     mapFilters.removeEventListener('change', onMapFilterChange);
+    avatarChoose.removeEventListener('change', onAdFormAvatarChange);
+    photosChoose.removeEventListener('change', onAdFormPhotosChange);
   };
 
   var onSuccessDownload = function (data) {
@@ -159,6 +166,25 @@
     window.pins.show(window.filter.getFilteredAds(window.data.get()));
   });
 
+  var onAdFormAvatarChange = function () {
+    var file = avatarChoose.files[0];
+    if (window.upload.check(file)) {
+      window.upload.avatar(file);
+    } else {
+      onError('Выбранный файл не картинка');
+    }
+  };
+
+  var onAdFormPhotosChange = function () {
+    var file = photosChoose.files[0];
+    if (window.upload.check(file)) {
+      window.upload.photo(file);
+    } else {
+      onError('Выбранный файл не картинка');
+    }
+  };
+
+  window.upload.clear();
   window.form.disableAll();
   window.form.fillInactiveAddress();
 
