@@ -1,13 +1,18 @@
 'use strict';
 
 (function () {
-  var adForm = document.querySelector('.ad-form');
-  var adPrice = adForm.querySelector('#price');
-  var adType = adForm.querySelector('#type');
-  var adCheckin = adForm.querySelector('#timein');
-  var adCheckout = adForm.querySelector('#timeout');
-  var adRoomNumber = adForm.querySelector('#room_number');
-  var adGuestNumber = adForm.querySelector('#capacity');
+  var AdRoomNumber = {
+    ONE: '1',
+    TWO: '2',
+    THREE: '3',
+    ONE_HUNDRED: '100'
+  };
+
+  var AdGuestNumber = {
+    ZERO: '0',
+    ONE: '1',
+    THREE: '3'
+  };
 
   var adPriceMap = {
     flat: 1000,
@@ -15,6 +20,21 @@
     house: 5000,
     palace: 10000
   };
+
+  var adGuestNumberMap = {
+    '1': '«для 1 гостя»',
+    '2': '«для 2 гостей» или «для 1 гостя»',
+    '3': '«для 3 гостей», «для 2 гостей» или «для 1 гостя»',
+    '100': '«не для гостей»'
+  };
+
+  var adForm = document.querySelector('.ad-form');
+  var adPrice = adForm.querySelector('#price');
+  var adType = adForm.querySelector('#type');
+  var adCheckin = adForm.querySelector('#timein');
+  var adCheckout = adForm.querySelector('#timeout');
+  var adRoomNumber = adForm.querySelector('#room_number');
+  var adGuestNumber = adForm.querySelector('#capacity');
 
   var onTypeChange = function () {
     adPrice.min = adPriceMap[adType.value];
@@ -28,25 +48,25 @@
   var onRoomOrGuestChange = function () {
     adGuestNumber.setCustomValidity('');
     switch (adRoomNumber.value) {
-      case '1':
-        if (adGuestNumber.value !== '1') {
-          adGuestNumber.setCustomValidity('«для 1 гостя»');
+      case AdRoomNumber.ONE:
+        if (adGuestNumber.value !== AdGuestNumber.ONE) {
+          adGuestNumber.setCustomValidity(adGuestNumberMap[adRoomNumber.value]);
         }
         break;
-      case '2':
-        if (adGuestNumber.value === '0' ||
-          adGuestNumber.value === '3') {
-          adGuestNumber.setCustomValidity('«для 2 гостей» или «для 1 гостя»');
+      case AdRoomNumber.TWO:
+        if (adGuestNumber.value === AdGuestNumber.ZERO ||
+          adGuestNumber.value === AdGuestNumber.THREE) {
+          adGuestNumber.setCustomValidity(adGuestNumberMap[adRoomNumber.value]);
         }
         break;
-      case '3':
-        if (adGuestNumber.value === '0') {
-          adGuestNumber.setCustomValidity('«для 3 гостей», «для 2 гостей» или «для 1 гостя»');
+      case AdRoomNumber.THREE:
+        if (adGuestNumber.value === AdGuestNumber.ZERO) {
+          adGuestNumber.setCustomValidity(adGuestNumberMap[adRoomNumber.value]);
         }
         break;
-      case '100':
-        if (adGuestNumber.value !== '0') {
-          adGuestNumber.setCustomValidity('«не для гостей»');
+      case AdRoomNumber.ONE_HUNDRED:
+        if (adGuestNumber.value !== AdGuestNumber.ZERO) {
+          adGuestNumber.setCustomValidity(adGuestNumberMap[adRoomNumber.value]);
         }
         break;
     }
@@ -60,11 +80,14 @@
     checkinAndCheckoutSync(adCheckout, adCheckin);
   };
 
-  onTypeChange();
-
   adRoomNumber.addEventListener('change', onRoomOrGuestChange);
   adGuestNumber.addEventListener('change', onRoomOrGuestChange);
   adCheckin.addEventListener('change', onCheckinChange);
   adCheckout.addEventListener('change', onCheckoutChange);
   adType.addEventListener('change', onTypeChange);
+
+  window.validation = {
+    checkRoomAndGuest: onRoomOrGuestChange,
+    checkType: onTypeChange
+  };
 })();

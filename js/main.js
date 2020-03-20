@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var INCORRECT_IMAGE_FORMAT_MESSAGE = 'Выбранный файл не картинка';
+
   var Location = {
     MIN_Y: 130,
     MAX_Y: 630,
@@ -26,9 +28,11 @@
     window.form.enableAll();
     window.form.fillCurrentAddress();
     adGuestNumber.value = '1';
+    window.validation.checkRoomAndGuest();
+    window.validation.checkType();
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    window.backend.download(onSuccessDownload, onError);
+    window.backend.download(onSuccessDownload, onErrorDownload);
 
     adForm.addEventListener('submit', onAdFormSubmit);
     resetButton.addEventListener('click', onAdFormReset);
@@ -60,7 +64,7 @@
 
   var onSuccessDownload = function (data) {
     window.data.save(data);
-    window.pins.show(data);
+    window.pins.show(data, window.filter.PIN_MAX_NUMBER);
   };
 
   var onSuccessUpload = function () {
@@ -68,12 +72,17 @@
     setInactiveState();
   };
 
-  var onError = function (error) {
+  var onErrorUpload = function (error) {
     window.error.show(error);
   };
 
+  var onErrorDownload = function (error) {
+    window.error.show(error);
+    setInactiveState();
+  };
+
   var onAdFormSubmit = function (evt) {
-    window.backend.upload(new FormData(adForm), onSuccessUpload, onError);
+    window.backend.upload(new FormData(adForm), onSuccessUpload, onErrorUpload);
     evt.preventDefault();
   };
 
@@ -163,7 +172,7 @@
     evt.preventDefault();
     window.card.remove();
     window.pins.remove();
-    window.pins.show(window.filter.getAds(window.data.get()));
+    window.pins.show(window.filter.getAds(window.data.get()), window.filter.PIN_MAX_NUMBER);
   });
 
   var onAdFormAvatarChange = function () {
@@ -171,7 +180,7 @@
     if (window.upload.check(file)) {
       window.upload.avatar(file);
     } else {
-      onError('Выбранный файл не картинка');
+      onErrorUpload(INCORRECT_IMAGE_FORMAT_MESSAGE);
     }
   };
 
@@ -180,7 +189,7 @@
     if (window.upload.check(file)) {
       window.upload.photo(file);
     } else {
-      onError('Выбранный файл не картинка');
+      onErrorUpload(INCORRECT_IMAGE_FORMAT_MESSAGE);
     }
   };
 

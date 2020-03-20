@@ -2,7 +2,6 @@
 
 (function () {
   var Pin = {
-    MAX_NUMBER: 5,
     X_OFFSET: 25,
     Y_OFFSET: 70
   };
@@ -51,8 +50,8 @@
     return fragment;
   };
 
-  var showPinsBlock = function (ads) {
-    mapPinsWrapper.appendChild(createPinsBlock(ads, Pin.MAX_NUMBER));
+  var showPinsBlock = function (ads, maxNumber) {
+    mapPinsWrapper.appendChild(createPinsBlock(ads, maxNumber));
   };
 
   var removePinsBlock = function () {
