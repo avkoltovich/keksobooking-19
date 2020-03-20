@@ -1,7 +1,11 @@
 'use strict';
 
 (function () {
-  var MAX_PIN_NUMBER = 5;
+  var Pin = {
+    MAX_NUMBER: 5,
+    X_OFFSET: 25,
+    Y_OFFSET: 70
+  };
 
   var map = document.querySelector('.map');
   var mapPinsWrapper = map.querySelector('.map__pins');
@@ -11,8 +15,8 @@
   var renderAdPin = function (ad) {
     var pin = pinTemplate.cloneNode(true);
 
-    pin.style.left = (ad.location.x - 25) + 'px';
-    pin.style.top = (ad.location.y - 70) + 'px';
+    pin.style.left = (ad.location.x - Pin.X_OFFSET) + 'px';
+    pin.style.top = (ad.location.y - Pin.Y_OFFSET) + 'px';
     pin.querySelector('img').src = ad.author.avatar;
     pin.querySelector('img').alt = ad.offer.title;
 
@@ -23,6 +27,7 @@
 
     pin.addEventListener('click', function () {
       renderAdCard();
+      pin.classList.add('map__pin--active');
     });
 
     pin.addEventListener('keydown', function (evt) {
@@ -47,7 +52,7 @@
   };
 
   var showPinsBlock = function (ads) {
-    mapPinsWrapper.appendChild(createPinsBlock(ads, MAX_PIN_NUMBER));
+    mapPinsWrapper.appendChild(createPinsBlock(ads, Pin.MAX_NUMBER));
   };
 
   var removePinsBlock = function () {

@@ -73,6 +73,6 @@
   };
 
   window.filter = {
-    getFilteredAds: getFilteredAds
+    getAds: getFilteredAds
   };
 })();

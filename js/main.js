@@ -163,7 +163,7 @@
     evt.preventDefault();
     window.card.remove();
     window.pins.remove();
-    window.pins.show(window.filter.getFilteredAds(window.data.get()));
+    window.pins.show(window.filter.getAds(window.data.get()));
   });
 
   var onAdFormAvatarChange = function () {

@@ -34,7 +34,10 @@
   };
 
   var showErrorPopup = function (errorText) {
-    main.appendChild(createErrorPopup(errorText));
+    var mainPopup = main.querySelector('.error');
+    if (!mainPopup) {
+      main.appendChild(createErrorPopup(errorText));
+    }
   };
 
   window.error = {

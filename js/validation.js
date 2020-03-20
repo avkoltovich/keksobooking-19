@@ -60,6 +60,8 @@
     checkinAndCheckoutSync(adCheckout, adCheckin);
   };
 
+  onTypeChange();
+
   adRoomNumber.addEventListener('change', onRoomOrGuestChange);
   adGuestNumber.addEventListener('change', onRoomOrGuestChange);
   adCheckin.addEventListener('change', onCheckinChange);

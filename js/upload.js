@@ -3,6 +3,7 @@
 (function () {
   var FILE_TYPES = ['jpg', 'jpeg', 'png'];
   var AVATAR_DEFAULT = 'img/muffin-grey.svg';
+  var PHOTO_STYLE = 'display: block; width: 100%; height: 100%';
 
   var adForm = document.querySelector('.ad-form');
   var avatarPreview = adForm.querySelector('.ad-form-header__preview img');
@@ -25,7 +26,7 @@
     reader.addEventListener('load', function () {
       var photoContainer = photosPreview.cloneNode(false);
       var photo = document.createElement('img');
-      photo.style = 'display: block; width: 100%; height: 100%';
+      photo.style = PHOTO_STYLE;
       photo.src = reader.result;
       photoContainer.appendChild(photo);
       photosPreviewContainer.appendChild(photoContainer);
