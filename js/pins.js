@@ -1,6 +1,10 @@
 'use strict';
 
 (function () {
+  var PinNumber = {
+    MAX: 5
+  };
+
   var map = document.querySelector('.map');
   var mapPinsWrapper = map.querySelector('.map__pins');
   var filtersContainer = map.querySelector('.map__filters-container');
@@ -44,15 +48,15 @@
     return fragment;
   };
 
-  var showPinsBlock = function (ads, maxNumber) {
-    mapPinsWrapper.appendChild(createPinsBlock(ads, maxNumber));
+  var showPinsBlock = function (ads) {
+    mapPinsWrapper.appendChild(createPinsBlock(ads, PinNumber.MAX));
   };
 
   var removePinsBlock = function () {
     var pinsBlock = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = 0; i < pinsBlock.length; i++) {
-      pinsBlock[i].remove();
-    }
+    pinsBlock.forEach(function (item) {
+      item.remove();
+    });
   };
 
   window.pins = {

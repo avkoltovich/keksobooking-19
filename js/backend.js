@@ -11,16 +11,13 @@
   };
 
   var StatusCode = {
-    OK: 200
-  };
-
-  var codeMap = {
-    '400': 'Ошибка 400: Плохой запрос',
-    '403': 'Ошибка 403: Запрещено',
-    '404': 'Ошибка 404: Не найден',
-    '500': 'Ошибка 500: Внутренняя ошибка сервера',
-    '502': 'Ошибка 502: Плохой шлюз',
-    '503': 'Ошибка 503: Сервис недоступен'
+    OK: 200,
+    BAD_REQUEST: 400,
+    FORBIDDEN: 403,
+    NOT_FOUND: 404,
+    INTERNAL_SERVER_ERROR: 500,
+    BAD_GATEWAY: 502,
+    SERVICE_UNAVAILABLE: 503
   };
 
   var getServerResponse = function (xhr, onSuccess, onError) {
@@ -29,10 +26,29 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === StatusCode.OK) {
         onSuccess(xhr.response);
-      } else if (codeMap[xhr.status]) {
-        onError(codeMap[xhr.status]);
       } else {
-        onError('Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText);
+        switch (xhr.status) {
+          case StatusCode.BAD_REQUEST:
+            onError('Ошибка 400: Плохой запрос');
+            break;
+          case StatusCode.FORBIDDEN:
+            onError('Ошибка 403: Запрещено');
+            break;
+          case StatusCode.NOT_FOUND:
+            onError('Ошибка 404: Не найден');
+            break;
+          case StatusCode.INTERNAL_SERVER_ERROR:
+            onError('Ошибка 500: Внутренняя ошибка сервера');
+            break;
+          case StatusCode.BAD_GATEWAY:
+            onError('Ошибка 502: Плохой шлюз');
+            break;
+          case StatusCode.SERVICE_UNAVAILABLE:
+            onError('Ошибка 503: Сервис недоступен');
+            break;
+          default:
+            onError('Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText);
+        }
       }
     });
     xhr.addEventListener('error', function () {
