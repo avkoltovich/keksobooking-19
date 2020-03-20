@@ -1,9 +1,7 @@
 'use strict';
 
 (function () {
-  var PinNumber = {
-    MAX: 5
-  };
+  var MAX_PIN_NUMBER = 5;
 
   var map = document.querySelector('.map');
   var mapPinsWrapper = map.querySelector('.map__pins');
@@ -49,7 +47,7 @@
   };
 
   var showPinsBlock = function (ads) {
-    mapPinsWrapper.appendChild(createPinsBlock(ads, PinNumber.MAX));
+    mapPinsWrapper.appendChild(createPinsBlock(ads, MAX_PIN_NUMBER));
   };
 
   var removePinsBlock = function () {

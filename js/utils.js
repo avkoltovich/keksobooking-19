@@ -6,9 +6,7 @@
     ENTER: 'Enter'
   };
 
-  var MouseButton = {
-    MAIN: 0
-  };
+  var MOUSE_BUTTON_MAIN = 0;
 
   var getCorrectWord = function (number, words) {
     if (words.length === 2) {
@@ -22,7 +20,7 @@
 
   window.utils = {
     Key: Key,
-    MouseButton: MouseButton,
+    MOUSE_BUTTON_MAIN: MOUSE_BUTTON_MAIN,
     getCorrectWord: getCorrectWord
   };
 })();

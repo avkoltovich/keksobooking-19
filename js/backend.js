@@ -6,9 +6,7 @@
     UPLOAD: 'https://js.dump.academy/keksobooking'
   };
 
-  var Timeout = {
-    IN_MS: 10000
-  };
+  var TIMEOUT_IN_MS = 10000;
 
   var StatusCode = {
     OK: 200,
@@ -58,7 +56,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = Timeout.IN_MS;
+    xhr.timeout = TIMEOUT_IN_MS;
   };
 
   var download = function (onSuccess, onError) {

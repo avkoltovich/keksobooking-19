@@ -80,7 +80,7 @@
   };
 
   var onMainButtonMousedown = function (evt) {
-    if (evt.button === window.utils.MouseButton.MAIN) {
+    if (evt.button === window.utils.MOUSE_BUTTON_MAIN) {
       onMainMapMousedown();
       mapPinMain.removeEventListener('mousedown', onMainButtonMousedown);
       mapPinMain.removeEventListener('keydown', onEnterKeydown);
@@ -98,7 +98,8 @@
   var checkMapBorder = function (min, max, current) {
     if (current < min) {
       return min;
-    } else if (current > max) {
+    }
+    if (current > max) {
       return max;
     }
     return current;
