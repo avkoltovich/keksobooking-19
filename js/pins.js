@@ -24,12 +24,10 @@
       map.insertBefore(window.card.create(ad), filtersContainer);
     };
 
-    var onPinClick = function () {
+    pin.addEventListener('click', function () {
       renderAdCard();
       pin.classList.add('map__pin--active');
-    };
-
-    pin.addEventListener('click', onPinClick);
+    });
 
     pin.addEventListener('keydown', function (evt) {
       if (evt.key === window.utils.Key.ENTER) {

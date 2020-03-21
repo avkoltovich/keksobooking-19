@@ -95,7 +95,6 @@
 
   window.card = {
     create: createCard,
-    remove: removePopupCard,
-    onEscKeydown: onEscKeydown
+    remove: removePopupCard
   };
 })();
