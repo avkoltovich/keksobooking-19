@@ -57,19 +57,24 @@
 
     cardCloseButton.addEventListener('click', function () {
       closeCard(card);
+      document.removeEventListener('keydown', onEscKeydown);
     });
     cardCloseButton.addEventListener('keydown', function (evt) {
       if (evt.key === window.utils.Key.ENTER) {
         closeCard(card);
+        document.removeEventListener('keydown', onEscKeydown);
       }
     });
-    document.addEventListener('keydown', function (evt) {
-      if (evt.key === window.utils.Key.ESC) {
-        closeCard(card);
-      }
-    });
+    document.addEventListener('keydown', onEscKeydown);
 
     return card;
+  };
+
+  var onEscKeydown = function (evt) {
+    if (evt.key === window.utils.Key.ESC) {
+      removePopupCard();
+      document.removeEventListener('keydown', onEscKeydown);
+    }
   };
 
   var closeCard = function (currentCard) {
@@ -78,6 +83,7 @@
       activePin.classList.remove('map__pin--active');
     }
     currentCard.remove();
+    document.removeEventListener('keydown', onEscKeydown);
   };
 
   var removePopupCard = function () {
@@ -89,6 +95,7 @@
 
   window.card = {
     create: createCard,
-    remove: removePopupCard
+    remove: removePopupCard,
+    onEscKeydown: onEscKeydown
   };
 })();

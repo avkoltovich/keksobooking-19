@@ -24,14 +24,17 @@
       map.insertBefore(window.card.create(ad), filtersContainer);
     };
 
-    pin.addEventListener('click', function () {
+    var onPinClick = function () {
       renderAdCard();
       pin.classList.add('map__pin--active');
-    });
+    };
+
+    pin.addEventListener('click', onPinClick);
 
     pin.addEventListener('keydown', function (evt) {
       if (evt.key === window.utils.Key.ENTER) {
         renderAdCard();
+        pin.classList.add('map__pin--active');
       }
     });
 
@@ -63,6 +66,6 @@
 
   window.pins = {
     show: showPinsBlock,
-    remove: removePinsBlock
+    remove: removePinsBlock,
   };
 })();

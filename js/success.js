@@ -11,13 +11,18 @@
     successPopup.addEventListener('click', function (evt) {
       if (evt.target !== successMessage) {
         successPopup.remove();
+        document.removeEventListener('keydown', onEscKeydown);
       }
     });
-    document.addEventListener('keydown', function (evt) {
+
+    var onEscKeydown = function (evt) {
       if (evt.key === window.utils.Key.ESC) {
         successPopup.remove();
+        document.removeEventListener('keydown', onEscKeydown);
       }
-    });
+    };
+
+    document.addEventListener('keydown', onEscKeydown);
 
     return successPopup;
   };

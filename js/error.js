@@ -13,22 +13,29 @@
 
     errorButton.addEventListener('click', function () {
       errorPopup.remove();
+      document.removeEventListener('keydown', onEscKeydown);
     });
     errorPopup.addEventListener('click', function (evt) {
       if (evt.target !== errorMessage) {
         errorPopup.remove();
+        document.removeEventListener('keydown', onEscKeydown);
       }
     });
     errorButton.addEventListener('keydown', function (evt) {
       if (evt.key === window.utils.Key.ENTER) {
         errorPopup.remove();
+        document.removeEventListener('keydown', onEscKeydown);
       }
     });
-    document.addEventListener('keydown', function (evt) {
+
+    var onEscKeydown = function (evt) {
       if (evt.key === window.utils.Key.ESC) {
         errorPopup.remove();
+        document.removeEventListener('keydown', onEscKeydown);
       }
-    });
+    };
+
+    document.addEventListener('keydown', onEscKeydown);
 
     return errorPopup;
   };
