@@ -10,8 +10,8 @@
   };
 
   var Url = {
-    DOWNLOAD: 'https://js.dump.academy/keksobooking/data',
-    UPLOAD: 'https://js.dump.academy/keksobooking'
+    DOWNLOAD: 'https://javascript.pages.academy/keksobooking/data',
+    UPLOAD: 'https://javascript.pages.academy/keksobooking'
   };
 
   var StatusCode = {
